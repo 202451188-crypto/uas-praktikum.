@@ -1,0 +1,86 @@
+const express = require('express');
+const router = express.Router();
+
+// Rute untuk menangani penambahan barang ke keranjang
+router.post('/add', (req, res) => {
+    // Jika keranjang belum ada, buat array kosong
+    if (!req.session.cart) {
+        req.session.cart = [];
+    }
+
+    // Ambil data yang dikirim dari form di app.js
+    const idBarang = req.body.id;
+    const namaBarang = req.body.nama;
+    const hargaBarang = req.body.harga;
+    const hargaAngka = parseInt(req.body.hargaAngka);
+    const jumlahBeli = parseInt(req.body.jumlah); // Menangkap input angka kuantitas
+
+    // Cek apakah barang ini sudah ada di keranjang sebelumnya?
+    const indexBarangAda = req.session.cart.findIndex(item => item.id === idBarang);
+
+    if (indexBarangAda > -1) {
+        // Jika sudah ada, tambahkan saja kuantitasnya
+        req.session.cart[indexBarangAda].jumlah += jumlahBeli;
+    } else {
+        // Jika belum ada, masukkan sebagai barang baru di keranjang
+        req.session.cart.push({
+            id: idBarang,
+            nama: namaBarang,
+            harga: hargaBarang,
+            hargaAngka: hargaAngka,
+            jumlah: jumlahBeli
+        });
+    }
+
+    // Setelah berhasil, arahkan kembali (refresh) ke halaman utama
+    res.redirect('/');
+});
+
+// Rute untuk melihat isi keranjang keseluruhan
+router.get('/', (req, res) => {
+    const cart = req.session.cart || [];
+    let totalBelanja = 0;
+
+    let html = `
+        <div style="max-width: 800px; margin: 50px auto; font-family: sans-serif;">
+            <h1 style="color: #ee4d2d; margin-bottom: 20px;">🛒 Keranjang Belanja Anda</h1>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <tr style="background: #f5f5f5; text-align: left;">
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Nama Produk</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd;">Harga</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; text-align: center;">Jumlah</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #ddd; text-align: right;">Subtotal</th>
+                </tr>
+    `;
+
+    if (cart.length === 0) {
+        html += `<tr><td colspan="4" style="padding: 20px; text-align: center;">Keranjang masih kosong.</td></tr>`;
+    } else {
+        cart.forEach(item => {
+            const subtotal = item.hargaAngka * item.jumlah;
+            totalBelanja += subtotal;
+            html += `
+                <tr>
+                    <td style="padding: 15px 10px; border-bottom: 1px solid #ddd;">${item.nama}</td>
+                    <td style="padding: 15px 10px; border-bottom: 1px solid #ddd;">${item.harga}</td>
+                    <td style="padding: 15px 10px; border-bottom: 1px solid #ddd; text-align: center; font-weight: bold;">${item.jumlah}</td>
+                    <td style="padding: 15px 10px; border-bottom: 1px solid #ddd; text-align: right;">Rp${subtotal.toLocaleString('id-ID')}</td>
+                </tr>
+            `;
+        });
+    }
+
+    html += `
+            </table>
+            <div style="text-align: right; font-size: 20px; font-weight: bold; margin-bottom: 20px;">
+                Total Belanja: Rp${totalBelanja.toLocaleString('id-ID')}
+            </div>
+            <a href="/" style="text-decoration: none; background: #888; color: white; padding: 10px 20px; border-radius: 4px;">Kembali Belanja</a>
+            <a href="/orders" style="text-decoration: none; background: #ee4d2d; color: white; padding: 10px 20px; border-radius: 4px; margin-left: 10px;">Lanjut Checkout</a>
+        </div>
+    `;
+
+    res.send(html);
+});
+
+module.exports = router;

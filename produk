@@ -1,0 +1,44 @@
+const express = require('express');
+const router = express.Router();
+
+const dbGambar = {
+    'Sepatu-Outdoor-FiveFingers-Vibram': '/sepatu.jpeg',
+    'Blouse-Tunik-Zalfa-Maroon': '/baju.jpeg',
+    'Tas-Ransel-Monogram-Luxury-Edition': '/tas.jpeg'
+};
+
+const dbHarga = {
+    'Sepatu-Outdoor-FiveFingers-Vibram': 'Rp 850.000',
+    'Blouse-Tunik-Zalfa-Maroon': 'Rp 175.000',
+    'Tas-Ransel-Monogram-Luxury-Edition': 'Rp 3.400.000'
+};
+
+router.get('/detail/:nama', (req, res) => {
+    const key = req.params.nama;
+    const gambar = dbGambar[key] || '/sepatu.jpeg';
+    const harga = dbHarga[key] || 'Rp 0';
+    const judul = key.replace(/-/g, ' ');
+
+    res.send(`
+        <body style="font-family: sans-serif; background: #f5f5f5; padding: 40px;">
+            <div style="max-width: 850px; margin: 0 auto; background: white; padding: 30px; display: flex; gap: 40px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <div style="width: 350px; height: 350px; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; padding: 15px;">
+                    <img src="${gambar}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                    <h2 style="margin-bottom: 15px; color: #333;">${judul}</h2>
+                    <h1 style="color: #ee4d2d; margin-bottom: 25px;">${harga}</h1>
+                    <p style="color: #757575; font-size: 14px; line-height: 24px; margin-bottom: 35px;">
+                        Katalog produk asli kelompok. Jaminan kualitas gambar real sesuai dengan asset lokal yang diunggah.
+                    </p>
+                    <form action="/cart/add" method="POST">
+                        <button type="submit" style="background: #ee4d2d; color: white; border: none; padding: 14px 40px; font-weight: bold; cursor: pointer; border-radius: 3px;">➕ Masukkan Keranjang</button>
+                    </form>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px;"><a href="/" style="color: #ee4d2d; text-decoration: none; font-weight: bold;">⬅ Kembali ke Beranda Utama</a></p>
+        </body>
+    `);
+});
+
+module.exports = router;

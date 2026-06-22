@@ -1,0 +1,28 @@
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+    const getHeader = req.app.locals.getHeader;
+    const footerHTML = req.app.locals.footerHTML;
+    
+    let html = getHeader('Checkout Pesanan');
+    html += `
+        <div style="background: white; padding: 30px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h3 style="color: #ee4d2d; margin-bottom: 20px;">📍 Alamat Pengiriman Virtual</h3>
+            <p><b>Kelompok Pemrograman Web (Toko Los)</b></p>
+            <p style="color: #757575;">Gedung Ruang Lab Komputer, Kampus Utama.</p>
+            <br>
+            <form action="/orders/checkout" method="POST">
+                <button type="submit" style="background: #ee4d2d; color: white; border: none; padding: 14px; font-weight: bold; width: 100%; cursor: pointer;">BUAT PESANAN SEKARANG</button>
+            </form>
+        </div>
+    `;
+    html += footerHTML;
+    res.send(html);
+});
+
+router.post('/checkout', (req, res) => {
+    res.send('<div style="text-align: center; margin-top: 50px;"><h2>🎉 Transaksi Sukses Berhasil Selesai!</h2><a href="/">Kembali</a></div>');
+});
+
+module.exports = router;
