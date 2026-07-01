@@ -89,7 +89,7 @@ Toko/
 - [ ] Manajemen produk dinamis (CRUD admin)
 - [ ] Riwayat pesanan per user
 
-## 👥 Kontributor
+## 👥 Kontributor Kelompok 3
 
 Proyek ini dibuat untuk keperluan tugas kelompok mata kuliah Pemrograman Web.
 Nobita Berliana 202451103 bertugas membuat tampilan login
