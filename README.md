@@ -92,10 +92,10 @@ Toko/
 ## 👥 Kontributor
 
 Proyek ini dibuat untuk keperluan tugas kelompok mata kuliah Pemrograman Web.
-Nobita bertugas membuat tampilan login
-Fyna bertugas untuk membuat tampilan catalog dan cari
-Salwa bertugas untuk membuat tampilan keranjang 
-Rizqika bertugas untuk membuat bagian checkout dan juga mendeploy
+Nobita Berliana 202451103 bertugas membuat tampilan login
+Benedicta Finalia Chrismanto 202451090 bertugas untuk membuat tampilan catalog dan cari
+Salwa Salsabilla Khasanah 202451088 bertugas untuk membuat tampilan keranjang 
+Rizqika Ale Sandro  202451188 bertugas untuk membuat bagian checkout dan juga mendeploy
 
 ## 📄 Lisensi
 
